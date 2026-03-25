@@ -1,4 +1,4 @@
-# PanoWan Serverless Worker for RunPod
+°# PanoWan Serverless Worker for RunPod
 # Generates 360° panoramic videos from text prompts
 
 FROM runpod/base:0.6.2-cuda12.2.0
@@ -39,4 +39,4 @@ COPY handler.py /app/handler.py
 RUN pip install runpod
 
 # Start the serverless handler
-CMD ["python", "/app/handler.py"]
+CMD ["python3", "/app/handler.py"]

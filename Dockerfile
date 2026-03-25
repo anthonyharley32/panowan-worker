@@ -34,9 +34,10 @@ RUN for i in 1 2 3; do \
 # Copy handler
 WORKDIR /app
 COPY handler.py /app/handler.py
+COPY test_input.json /app/test_input.json
 
 # Install runpod SDK
-RUN pip install runpod
+RUN python3 -m pip install runpod
 
 # Start the serverless handler
 CMD ["python3", "/app/handler.py"]

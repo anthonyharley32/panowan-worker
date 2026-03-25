@@ -12,7 +12,7 @@ print(f"Python version: {sys.version}", flush=True)
 try:
     print("Importing runpod...", flush=True)
     import runpod
-    print(f"runpod imported ok", flush=True)
+    print("runpod imported ok", flush=True)
 except Exception as e:
     print(f"FATAL: Failed to import runpod: {e}", flush=True)
     traceback.print_exc()
@@ -24,28 +24,17 @@ import base64
 
 print("All imports successful", flush=True)
 
-# Check that model files exist
-wan_path = "/app/PanoWan/models/Wan-AI/Wan2.1-T2V-1.3B"
-lora_path = "/app/PanoWan/models/PanoWan/latest-lora.ckpt"
-
-print(f"Checking Wan model path: {wan_path}", flush=True)
-print(f"  Exists: {os.path.exists(wan_path)}", flush=True)
-if os.path.exists(wan_path):
-    print(f"  Contents: {os.listdir(wan_path)[:10]}", flush=True)
-
-print(f"Checking LoRA path: {lora_path}", flush=True)
-print(f"  Exists: {os.path.exists(lora_path)}", flush=True)
-
-# Check PanoWan directory
+# Check that key paths exist
 panowan_dir = "/app/PanoWan"
-print(f"PanoWan dir exists: {os.path.exists(panowan_dir)}", flush=True)
 if os.path.exists(panowan_dir):
-    print(f"PanoWan contents: {os.listdir(panowan_dir)[:15]}", flush=True)
+    print(f"PanoWan dir: OK", flush=True)
     models_dir = os.path.join(panowan_dir, "models")
     if os.path.exists(models_dir):
         print(f"Models dir contents: {os.listdir(models_dir)}", flush=True)
+else:
+    print(f"WARNING: PanoWan dir not found at {panowan_dir}", flush=True)
 
-# Check uv is available
+# Check uv
 uv_check = subprocess.run(["which", "uv"], capture_output=True, text=True)
 print(f"uv location: {uv_check.stdout.strip() or 'NOT FOUND'}", flush=True)
 
@@ -67,7 +56,7 @@ def handler(event):
             "--prompt", prompt
         ]
 
-        print(f"Running command: {' '.join(cmd)}", flush=True)
+        print(f"Running: {' '.join(cmd)}", flush=True)
 
         result = subprocess.run(
             cmd,
@@ -78,8 +67,10 @@ def handler(event):
         )
 
         print(f"Return code: {result.returncode}", flush=True)
-        print(f"Stdout: {result.stdout[-500:]}", flush=True)
-        print(f"Stderr: {result.stderr[-500:]}", flush=True)
+        if result.stdout:
+            print(f"Stdout: {result.stdout[-500:]}", flush=True)
+        if result.stderr:
+            print(f"Stderr: {result.stderr[-500:]}", flush=True)
 
         if result.returncode != 0:
             return {"error": f"Generation failed: {result.stderr[-500:]}"}

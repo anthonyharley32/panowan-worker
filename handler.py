@@ -32,8 +32,8 @@ def handler(event):
         # Run PanoWan generation
         cmd = [
             "uv", "run", "panowan-test",
-            "--wan-model-path", "/app/models/Wan-AI/Wan2.1-T2V-1.3B",
-            "--lora-checkpoint-path", "/app/models/PanoWan/latest-lora.ckpt",
+            "--wan-model-path", "./models/Wan-AI/Wan2.1-T2V-1.3B",
+            "--lora-checkpoint-path", "./models/PanoWan/latest-lora.ckpt",
             "--output-path", output_path,
             "--prompt", prompt
         ]
